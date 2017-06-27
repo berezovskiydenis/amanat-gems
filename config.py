@@ -18,6 +18,7 @@ class Config:
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     MAIL_SUBJECT_PREFIX = '[Gem]'
     MAIL_SENDER = 'Gem Bot <flasky@example.com>'
+    POSTS_PER_PAGE = 30
 
     @staticmethod
     def init_app(app):
