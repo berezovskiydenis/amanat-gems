@@ -114,15 +114,15 @@ class Document(object):
 
     @declared_attr
     def cause(cls):
-        return db.Column(db.Text(1000))
+        return db.Column(db.String(1000))
     
     @declared_attr
     def description(cls):
-        return db.Column(db.Text(3000))
+        return db.Column(db.String(3000))
 
     @declared_attr
     def plan(cls):
-        return db.Column(db.Text(3000))
+        return db.Column(db.String(3000))
     
     @declared_attr
     def number(cls):
@@ -190,7 +190,7 @@ class Proposal(Document, db.Model):
 class Trash(Document, db.Model):
     __tablename__ = 'trashes'
     author = db.Column(db.Integer, db.ForeignKey('users.id'))
-    trash_reason = db.Column(db.Text(1000))
+    trash_reason = db.Column(db.String(1000))
 
 
 class Gem(Document, db.Model):
