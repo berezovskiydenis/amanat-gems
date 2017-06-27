@@ -1,0 +1,70 @@
+{% extends "_base.html" %}
+
+{% block content %}
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header"><h1>Новый черновик</h1></div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <div class="btn-group" role="group" aria-label="Действия с черновиком">
+                <a class="btn btn-default" href="{{ url_for('draft.drafts') }}"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> К списку черновиков</a>
+            </div>
+            <hr>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <form method="POST">
+                {{ form.csrf_token }}
+                <div class="form-group">
+                    {{ form.name.label }}
+                    {{ form.name(class="form-control") }}
+                    {% if form.name.errors %}
+                        {% for error in form.name.errors %}
+                            <p class="text-danger"><small>{{ error }}</small></p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.cause.label }}
+                    {{ form.cause(class="form-control", rows=6) }}
+                    {% if form.cause.errors %}
+                        {% for error in form.cause.errors %}
+                            <p class="text-danger"><small>{{ error }}</small></p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.description.label }}
+                    {{ form.description(class="form-control", rows=6) }}
+                    {% if form.description.errors %}
+                        {% for error in form.description.errors %}
+                            <p class="text-danger"><small>{{ error }}</small></p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.plan.label }}
+                    {{ form.plan(class="form-control", rows=6) }}
+                    {% if form.plan.errors %}
+                        {% for error in form.plan.errors %}
+                            <p class="text-danger"><small>{{ error }}</small></p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                {{  form.submit(class="btn btn-success") }}
+            </form>
+        </div>
+    </div>
+
+</div> <!-- container -->
+{% endblock %}

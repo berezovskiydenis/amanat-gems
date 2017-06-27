@@ -1,0 +1,89 @@
+{% extends "_base.html" %}
+
+{% block content %}
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header"><h1>Все заявки на бриллианты</h1></div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <div class="btn-group" role="group" aria-label="Действия с заявкой">
+                <a class="btn btn-default" href="{{ url_for('main.index') }}">
+                    <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> На главную
+                </a>
+            </div>
+            <hr>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Номер</th>
+                        <th>Создан</th>
+                        <th>Автор</th>
+                        <th>Название</th>
+                        <th colspan="3">Действие</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if prpls %}
+                        {% for prpl in prpls.items %}
+                        <tr>
+                            <td><a href="{{ url_for('proposal.a_proposal', id=prpl.id) }}">{{ prpl.number }}</a></td>
+                            <td>{{ moment(prpl.created).format('DD.MM.YY') }}</td>
+                            <td>{{ prpl.proposal_author.username }}</td>
+                            <td>{{ prpl.name|markdown }}</td>
+                            <td><a href="{{ url_for('proposal.proposals_edit', id=prpl.id) }}"><span class="glyphicon glyphicon-pencil" aria-hidden="true" title="Редактировать"></a></td>
+                            <td><a href="{{ url_for('proposal.proposals_deny', id=prpl.id) }}"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true" title="Отказать в заявке"></a></td>
+                            <td>
+                                {% if current_user.role == 1 %}
+                                    <a href="{{ url_for('proposal.proposals_accept', id=prpl.id) }}"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true" title="Одобрить заявку"></a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <li {% if not prpls.has_prev %} class="disabled" {% endif %}>
+                        <a href="{% if prpls.has_prev %} {{ url_for('proposal.proposals_all', page=prpls.page-1) }} {% else %}#{% endif %}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+                    </li>
+
+                    {% for p in prpls.iter_pages() %}
+                        {% if p %}
+                            {% if p == prpls.page %}
+                                <li class="active"><a href="{{ url_for('proposal.proposals_all', page=p) }}">{{ p }}</a></li>
+                            {% else %}
+                                <li><a href="{{ url_for('proposal.proposals_all', page=p) }}">{{ p }}</a></li>
+                            {% endif %}
+                        {% else %}
+                            <li class="disabled"><a href="#">&hellip;</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    <li {% if not prpls.has_next %} class="disabled" {% endif %}>
+                        <a href="{% if prpls.has_next %} {{ url_for('proposal.proposals_all', page=prpls.page+1) }} {% else %}#{% endif %}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

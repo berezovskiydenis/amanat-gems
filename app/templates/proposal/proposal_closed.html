@@ -1,0 +1,65 @@
+{% extends "_base.html" %}
+
+{% block content %}
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header"><h1>Отмененная заявка на бриллиант {{ prpl.number }}</h1></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="btn-group" role="group" aria-label="Действия с заявкой">
+                <a class="btn btn-default" href="{{ url_for('proposal.proposals_my_closed', page=1) }}"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Назад к списку</a>
+            </div>
+            <hr>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-info">
+                <div class="panel-heading"><h3 class="panel-title">Автор</h3></div>
+                <div class="panel-body">{{ prpl.trash_author.username }}</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-info">
+                <div class="panel-heading"><h3 class="panel-title">Дата создания</h3></div>
+                <div class="panel-body">
+                    <p>{{ moment(prpl.created).format('DD.MM.YY HH:mm') }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body newspaper">
+                    <h3>Название</h3>
+                    {{ prpl.name|markdown }}
+                    <h3>Причина</h3>
+                    {{ prpl.cause|markdown }}
+                    <h3>Описание</h3>
+                    {{ prpl.description|markdown }}
+                    <h3>План</h3>
+                    {{ prpl.plan|markdown }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-warning">
+                <div class="panel-heading"><h3 class="panel-title">Причина отказа</h3></div>
+                <div class="panel-body newspaper">{{ prpl.trash_reason|markdown }}</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

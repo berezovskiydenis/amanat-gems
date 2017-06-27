@@ -1,0 +1,86 @@
+{% extends "_base.html" %}
+
+{% block content %}
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header"><h1>Сотрудники</h1></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="btn-group" role="group" aria-label="Действия с черновиком">
+                <a class="btn btn-default" href="{{ url_for('main.index') }}"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> На главную</a>
+                <a class="btn btn-primary" href="{{ url_for('admin.users_add') }}">Создать нового сотрудника</a>
+            </div>
+            <hr>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <h4>Роль пользователя зависит от цвета строки в таблице</h4>
+            <p><span class="label label-success">Модератор</span> | <span class="label label-danger">Администратор</span></p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Создан</th>
+                        <th>Посл. вход</th>
+                        <th>Имя</th>
+                        <th>email</th>
+                        <th>Акт.</th>
+                        <th>Подразделение</th>
+                        <th colspan="4">Действие</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if users %}
+                        {% for user in users %}
+                        
+                        {% if user.role is equalto 1 %}
+                            <tr class="success">
+                        {% elif user.role is equalto 2 %}
+                            <tr class="danger">
+                        {% else %}
+                            <tr>
+                        {% endif %}
+                            <td>{{ user.id }}</td>
+                            <td>{{ moment(user.created).format('DD.MM.YY HH.mm') }}</td>
+                            <td>
+                                {% if user.last_login %}
+                                    {{ moment(user.last_login).format('DD.MM.YY HH.mm') }}
+                                {% endif %}
+                            </td>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ 'да' if user.active is equalto 1 else 'нет' }}</td>
+                            <td>{{ user.dep.depname }}</td>
+                            <td><a href="{{ url_for('admin.users_edit', id = user.id) }}" title="Редактировать"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></a></td>
+                            <td><a href="{{ url_for('admin.users_change_password', id = user.id) }}" title="Сменить пароль">***</a></td>
+                            <td><a href="{{ url_for('admin.users_change_email', id = user.id) }}" title="Сменить email">@</a></td>
+                            <td>
+                                {% if user.active is equalto 1 %}
+                                    <a href="{{ url_for('admin.users_block', id = user.id) }}" title="Блокировать"><span class="glyphicon glyphicon-remove" aria-hidden="true"></a>
+                                {% else %}
+                                    <a href="{{ url_for('admin.users_unblock', id = user.id) }}" title="Разблокировать"><span class="glyphicon glyphicon-ok" aria-hidden="true"></a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

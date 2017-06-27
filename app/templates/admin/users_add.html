@@ -1,0 +1,92 @@
+{% extends "_base.html" %}
+
+{% block content %}
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header"><h1>Новый сотрудник</h1></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="btn-group" role="group">
+                <a class="btn btn-default" href="{{ url_for('admin.users') }}"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> К списку пользователей</a>
+            </div>
+            <hr>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <form method="POST">
+                {{ form.csrf_token }}
+
+                <div class="form-group">
+                    {{ form.email.label }}
+                    {{ form.email(class="form-control") }}
+                    {% if form.email.errors %}
+                        {% for error in form.email.errors %}
+                            <p class="text-danger"><small>{{ error }}</small></p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.username.label }}
+                    {{ form.username(class="form-control") }}
+                    {% if form.username.errors %}
+                        {% for error in form.username.errors %}
+                            <p class="text-danger"><small>{{ error }}</small></p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.department.label }}
+                    {{ form.department(class="form-control") }}
+                    {% if form.department.errors %}
+                        {% for error in form.department.errors %}
+                            <p class="text-danger"><small>{{ error }}</small></p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.role.label }}
+                    {{ form.role(class="form-control") }}
+                    {% if form.role.errors %}
+                        {% for error in form.role.errors %}
+                            <p class="text-danger"><small>{{ error }}</small></p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.password.label }}
+                    {{ form.password(class="form-control") }}
+                    {% if form.password.errors %}
+                        {% for error in form.password.errors %}
+                            <p class="text-danger"><small>{{ error }}</small></p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.confirm_password.label }}
+                    {{ form.confirm_password(class="form-control") }}
+                    {% if form.confirm_password.errors %}
+                        {% for error in form.confirm_password.errors %}
+                            <p class="text-danger"><small>{{ error }}</small></p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                {{  form.submit(class="btn btn-success") }}
+            </form>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

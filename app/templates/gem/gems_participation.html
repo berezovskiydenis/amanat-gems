@@ -1,0 +1,69 @@
+{% extends "_base.html" %}
+
+{% block content %}
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header"><h1>Бриллианты</h1></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="btn-group" role="group">
+                <a class="btn btn-default" href="{{ url_for('main.index') }}"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> На главную</a>
+            </div>
+            <hr>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Номер</th>
+                        <th>Создан</th>
+                        <th>Закрыт</th>
+                        <th>Автор</th>
+                        <th>Название</th>
+                        <th colspan="2">Действие</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if gems %}
+                        {% for gem in gems %}
+                        <tr {{ "class=success" if gem.closed_at is not none }}>
+                            <td><a href="{{ url_for('gem.a_gem', id=gem.id) }}">{{ gem.number }}</a></td>
+                            <td>{{ moment(gem.created).format('DD.MM.YY') }}</td>
+                            {% if gem.closed_at is none %}
+                                <td></td>
+                            {% else %}
+                                <td><p>{{ moment(gem.closed_at).format('DD.MM.YYYY') }}</p></td>
+                            {% endif %}
+                            <td>{{ gem.gem_author.username }}</td>
+                            <td>{{ gem.name|markdown }}</td>
+                            
+                            {% if current_user.role in [1, 2]%}
+                                <td><a href="{{ url_for('gem.gems_edit', gem_id=gem.id) }}"><span class="glyphicon glyphicon-pencil" aria-hidden="true" title="Редактировать"></a></td>
+                                {% if gem.closed_at is not none %}
+                                    <td></td>
+                                {% else %}
+                                    <td><a href="{{ url_for('gem.gems_close', id=gem.id) }}"><span class="glyphicon glyphicon-ok" aria-hidden="true" title="Завершить успешно"></a></td>
+                                {% endif %}
+                            {% elif current_user.role == 0 and current_user.id == gem.author %}
+                                <td><a href="{{ url_for('gem.gems_edit', gem_id=gem.id) }}"><span class="glyphicon glyphicon-pencil" aria-hidden="true" title="Редактировать"></a></td>
+                                <td></td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

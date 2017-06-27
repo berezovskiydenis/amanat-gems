@@ -1,0 +1,7 @@
+# python files
+env
+__pycache__
+*.sqlite
+
+# vscode
+.vscode

@@ -1,0 +1,157 @@
+{% extends "_base.html" %}
+
+{% block content %}
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header"><h1>Бриллиант {{ gem.number }}</h1></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="btn-group" role="group" aria-label="Gem actions">
+                <!--Назад к списку бриллиантов-->
+                <a class="btn btn-default" href="{{ url_for('gem.gems') }}"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Назад к списку</a>
+                <!--Автор бриллианта - простой пользователь-->
+                {% if current_user.id == gem.author and current_user.role == 0 %}
+                    <!--Редактировать-->
+                    <a class="btn btn-primary" href="{{ url_for('gem.gems_edit', gem_id=gem.id) }}">Редактировать <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
+                    <!--Добавить членов команды-->
+                    <a class="btn btn-primary" href="{{ url_for('gem.edit_team', gemid=gem.id) }}">Добавить команду <span class="glyphicon glyphicon-user" aria-hidden="true"></span></a>
+                {% endif %} 
+                <!--Автор бриллианта - член совета или админ -->
+                {% if current_user.id == gem.author and current_user.role in [1, 2] %}
+                    <!--Редактировать-->
+                    <a class="btn btn-primary" href="{{ url_for('gem.gems_edit', gem_id=gem.id) }}">Редактировать <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
+                    <!--Добавить членов команды-->
+                    <a class="btn btn-primary" href="{{ url_for('gem.edit_team', gemid=gem.id) }}">Добавить команду <span class="glyphicon glyphicon-user" aria-hidden="true"></span></a>
+                    <!--Закрыть бриллиант-->
+                    <a class="btn btn-success" href="{{ url_for('gem.gems_close', id=gem.id) }}">Закрыть <span class="glyphicon glyphicon-ok" aria-hidden="true"></a>
+                {% endif %}
+                <!--Член совета или админ, но не автор бриллианта-->
+                {% if current_user.id != gem.author and current_user.role in [1, 2] %}
+                    <!--Редактировать-->
+                    <a class="btn btn-primary" href="{{ url_for('gem.gems_edit', gem_id=gem.id) }}">Редактировать <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
+                    <!--Закрыть бриллиант-->
+                    <a class="btn btn-success" href="{{ url_for('gem.gems_close', id=gem.id) }}">Закрыть <span class="glyphicon glyphicon-ok" aria-hidden="true"></a>
+                {% endif %}
+            </div>
+            <hr>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-info">
+                <div class="panel-heading"><h3 class="panel-title">Информация о бриллианте</h3></div>
+                <div class="panel-body">
+                    <dl>
+                        <dt>Автор</dt>
+                        <dd>{{ gem.gem_author.username }}</dd>
+                    </dl>
+                    <dl>
+                        <dt>Дата одобрения заявки на бриллиант</dt>
+                        <dd>{{ moment(gem.created).format('DD.MM.YYYY HH:mm') }}</dd>
+                    </dl>
+                    <dl>
+                        <dt>Дата закрытия бриллианта</dt>
+                        <dd>
+                            {% if gem.closed_at is not none %}
+                            {{ moment(gem.closed_at).format('DD.MM.YYYY HH:mm') }}
+                            {% endif %}
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="panel panel-info">
+                <div class="panel-heading"><h3 class="panel-title">Команда бриллианта</h3></div>
+                <div class="panel-body">
+                    {% if team%}
+                    <ol>
+                        {% if current_user.id == gem.author %}
+                            {% for member in team %}
+                                <li>{{ member.team_member.username }} <a href="{{ url_for('gem.delete_team_member', gemid=gem.id, member_id=member.user_id)}}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></li>
+                            {% endfor %}
+                        {% else %}
+                            {% for member in team %}
+                                <li>{{ member.team_member.username }}</li>
+                            {% endfor %}
+                        {% endif %}
+                    </ol>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body newspaper">
+                    <h3>Название</h3>
+                    {{ gem.name|markdown }}
+                    <hr>
+
+                    <h3>Причина</h3>
+                    {{ gem.cause|markdown }}
+                    <hr>
+
+                    <h3>Описание</h3>
+                    {{ gem.description|markdown }}
+                    <hr>
+
+                    <h3>План</h3>
+                    {{ gem.plan|markdown }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Комментарии к бриллианту</h2>
+        </div>
+    </div>
+
+    {% if current_user['role'] > 0 or current_user.id == gem.author or current_user.id in team_ids %}
+    <div class="row">
+        <div class="col-md-12">
+            <form class="form" method="POST">
+                {{ form.csrf_token }}
+                <div class="form-group">
+                    {{ form.comment.label }}
+                    {{ form.comment(class="form-control") }}
+                    {% if form.comment.errors %}
+                        {% for error in form.comment.errors %}
+                            <p class="text-danger"><small>{{ error }}</small></p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                {{  form.submit(class="btn btn-success") }}
+            </form>
+            <hr>
+        </div>
+    </div>
+    {% endif %}
+    
+    {% for comment in comments %}
+    <div class="row">
+        <div class="col-md-12">
+            <blockquote >
+                {{ comment.comment|markdown }}
+                <footer>{{ comment.comment_author.username }} <cite title="Source Title">{{ moment(comment.created).format('LLL') }}</cite></footer>
+            </blockquote>
+        </div>
+    </div>
+    {% endfor %}
+
+</div> <!--container-->
+
+{% endblock %}

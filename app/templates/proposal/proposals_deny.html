@@ -1,0 +1,41 @@
+{% extends "_base.html" %}
+
+{% block content %}
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header"><h1>Отказ в заявке на бриллиант</h1></div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <div class="btn-group" role="group" aria-label="Действия с заявкой">
+                <a class="btn btn-default" href="{{ url_for('proposal.proposals_all', page=1) }}"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Назад к списку</a>
+                <a class="btn btn-primary" href="{{ url_for('proposal.a_proposal', id=prpl.id) }}">Назад к заявке</a>
+            </div>
+            <hr>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <form method="POST">
+                {{ form.csrf_token }}
+                <div class="form-group">
+                    {{ form.reason.label }}
+                    {{ form.reason(class="form-control") }}
+                    {% if form.reason.errors %}
+                        {% for error in form.reason.errors %}
+                            <p class="text-danger"><small>{{ error }}</small></p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                {{  form.submit(class="btn btn-success") }}
+            </form>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends "_base.html" %}
+
+{% block content %}
+<div class="container">
+
+    <form method="POST" class="form-signin">
+        {{ form.csrf_token }}
+    
+        <h3 class="form-signin-heading">Введите учетные данные</h3>
+        
+        {{ form.email(class="form-control", placeholder="Email address") }}
+        {% if form.email.errors %}
+            {% for error in form.email.errors %}
+                <p class="text-danger"><small>{{ error }}</small></p>
+            {% endfor %}
+        {% endif %}
+        
+        {{ form.password(class="form-control", placeholder="Password") }}
+        {% if form.password.errors %}
+            {% for error in form.password.errors %}
+                <p class="text-danger"><small>{{ error }}</small></p>
+            {% endfor %}
+        {% endif %}
+
+        <div class="checkbox"><label>{{ form.remember_me() }} Запомнить меня</label></div>
+        
+        {{  form.submit(class="btn btn-lg btn-success btn-block") }}
+    </form>
+
+    <style>
+        body {
+            padding-top: 40px;
+            padding-bottom: 40px;
+            background-color: #E2F0D6;
+        }
+
+        .form-signin {
+            max-width: 330px;
+            padding: 15px;
+            margin: 0 auto;
+        }
+        .form-signin .form-signin-heading,
+        .form-signin .checkbox {
+            margin-bottom: 10px;
+        }
+        .form-signin .checkbox {
+            font-weight: normal;
+        }
+        .form-signin .form-control {
+            position: relative;
+            height: auto;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+                box-sizing: border-box;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .form-signin .form-control:focus {
+            z-index: 2;
+        }
+        .form-signin input[type="email"] {
+            margin-bottom: -1px;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+        .form-signin input[type="password"] {
+            margin-bottom: 10px;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+    </style>
+    
+</div>
+{% endblock %}

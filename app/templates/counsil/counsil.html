@@ -1,0 +1,45 @@
+{% extends "_base.html" %}
+
+{% block content %}
+<div class="container">
+    
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header"><h1>Совет по бриллиантам</h1></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="btn-group" role="group">
+                <a class="btn btn-default" href="{{ url_for('main.index') }}"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> На главную</a>
+            </div>
+            <hr>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Имя</th>
+                        <th>Отдел</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for member in members %}
+                    <tr>
+                        <td>{{member.username}}</td>
+                        <td>{{member.dep.depname}}</td>
+                        <td><a href="mailto:{{member.email}}">{{member.email}}</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+     
+</div>
+{% endblock %}

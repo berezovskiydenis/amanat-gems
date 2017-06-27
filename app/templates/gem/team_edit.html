@@ -1,0 +1,26 @@
+{% extends "_base.html" %}
+
+{% block content %}
+<div class="container">
+    
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header"><h1>Команда бриллианта</h1></div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <form class="form" method="POST">
+                {{ form.csrf_token }}
+                <div class="form-group">
+                    {{ form.member.label }}
+                    {{ form.member(class="form-control", type="checkbox", id="members") }}
+                </div>
+                {{  form.submit(class="btn btn-success") }}
+            </form>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

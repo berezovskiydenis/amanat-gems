@@ -1,0 +1,62 @@
+{% extends "_base.html" %}
+
+{% block content %}
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header"><h1>Бриллианты</h1></div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- ЧЕРНОВИКИ -->
+        <div class="col-md-4">
+            <h3>Черновики</h3>
+            <p><a href="{{ url_for('draft.drafts', page=1) }}">Список</a> черновиков</p>
+            <p><a href="{{ url_for('draft.drafts_add') }}">Создать</a> новый черновик</p>
+        </div>
+
+        <!-- ЗАЯВКИ НА БРИЛЛИАНТЫ -->
+        <div class="col-md-4">
+            <h3>Заявки</h3>
+            <p><a href="{{ url_for('proposal.proposals_my_open', page=1) }}">Список</a> заявок</p>
+            <p><a href="{{ url_for('proposal.proposals_my_closed', page=1) }}">Список</a> отмененных заявок</p>
+            {% if current_user.role > 0 %}
+                <p><a href="{{ url_for('proposal.proposals_all', page=1) }}">Список</a> <strong>всех</strong> открытых заявок <span class="badge">{{ total_proposals }}</span></p>
+            {% endif %}
+        </div>
+        
+        <!-- БРИЛЛИАНТЫ -->
+        <div class="col-md-4">
+            <h3>Бриллианты</h3>
+            <p><a href="{{ url_for('gem.gems_my', page=1) }}">Список</a> <strong>моих</strong> бриллиантов</p>
+            <p><a href="{{ url_for('gem.gems', page=1) }}">Список</a> <strong>всех</strong> бриллиантов <span class="badge">{{ total_gems }}</span></p>
+            <p><a href="{{ url_for('gem.gems_participation') }}">Список</a> бриллиантов, в которых я учавствую <span class="badge">{{ total_participation }}</span></p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <hr>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <h3>Дополнительная информация</h3>
+            <p><a href="{{ url_for('counsil.counsil') }}">Совет</a> по бриллиантам</p>
+            <p><a href="{{ url_for('gem_stat.show_stat_all') }}">Статистика</a> по бриллиантам</p>
+            <p><a href="{{ url_for('main.documentation') }}">Документация</a></p>
+        </div>
+        {% if current_user.role > 1 %}
+        <div class="col-md-4">
+            <h3>Настройки системы</h3>
+            <p><a href="{{ url_for('admin.users') }}">Список</a> пользователей</p>
+            <p><a href="{{ url_for('admin.deps') }}">Список</a> подразделений</p>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}
