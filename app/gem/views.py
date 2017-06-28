@@ -157,7 +157,7 @@ def delete_team_member(gemid, member_id):
 @login_required
 def gems_participation():
     """Show gems where user participates."""
-    _participation = db.session.query(Team).filter(Team.user_id==current_user.id).group_by(Team.gem_id).all()
+    _participation = db.session.query(Team.gem_id).filter(Team.user_id==current_user.id).group_by(Team.gem_id).all()
     gems = []
     if _participation:
         gem_ids = [x.gem_id for x in _participation]
