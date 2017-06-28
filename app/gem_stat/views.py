@@ -17,7 +17,8 @@ def query_all_gems():
         User.username,  # author name
         func.count(Gem.author).label('cnt')  # count authors
         ).group_by(
-            Gem.author
+            Gem.author,
+            User.username
         ).order_by(
             desc('cnt'),  # order from more gems to less gems
             asc(User.username)
@@ -33,7 +34,8 @@ def query_closed_gems():
         ).filter(
             Gem.closed_at != None
         ).group_by(
-            Gem.author
+            Gem.author,
+            User.username
         ).order_by(
             desc('cnt'),  # order from more gems to less gems
             asc(User.username)
